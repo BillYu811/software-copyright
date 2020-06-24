@@ -6,8 +6,6 @@ import os, sys, time, json
 
 
 class Rz:
-    with_file_name = True
-
     __files_count = 0
     __output_lines = 0
     __file_in_line = []
@@ -21,7 +19,7 @@ class Rz:
         self.__with_filepath = config.get('with_filepath?', False) or False
         self.__with_filename = config.get('with_filename?', True) or True
 
-        self.output_file = open(self.__output_filename, 'a+')
+        self.__output_file = open(self.__output_filename, 'a+')
 
     def walk_all(self):
         start = time.time()
@@ -42,11 +40,13 @@ class Rz:
         sys.stdout.flush()
 
     def walk_dir(self, path):
-        files = os.listdir(path)  # 得到文件夹下的所有文件名称
+        # 得到目录下的所有文件（和目录）名称
+        files = os.listdir(path)
 
-        for file in files:  # 遍历文件夹
+        # 遍历之
+        for file in files:
             if os.path.isdir(path + '/' + file):
-                # 递归
+                # 如果是目录则递归之
                 self.walk_dir(path + "/" + file)
             else:
                 if not (os.path.splitext(file)[-1] in self.__allow_files_suffix):
@@ -58,16 +58,16 @@ class Rz:
                 self.__file_in_line.append({'file_path': path + "/" + file, 'line': self.__output_lines + 1})
 
                 if self.__with_filename:
-                    self.output_file.write('#{}\n'.format(file))
+                    self.__output_file.write('#{}\n'.format(file))
                     self.__output_lines += 1
                 elif self.__with_filepath:
-                    self.output_file.write('#{}\n'.format(path + "/" + file))
+                    self.__output_file.write('#{}\n'.format(path + "/" + file))
                     self.__output_lines += 1
 
                 for line in iter_f:  # 遍历文件，一行行遍历，读取文本
                     if (line[0] in self.__skip_when) or (line[0:1] in self.__skip_when):
                         continue
-                    self.output_file.write(line)
+                    self.__output_file.write(line)
                     self.set_and_print_counts(0, 1)
                 self.set_and_print_counts(1, 0)
 
