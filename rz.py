@@ -17,7 +17,7 @@ class Rz:
         self.__skip_when = config.get('skip_when_character', []) or ['#', '!', '\n', '\r']
 
         self.__with_filepath = config.get('with_filepath?', False) or False
-        self.__with_filename = config.get('with_filename?', True) or True
+        self.__with_filename = config.get('with_filename?', False) or False
 
         self.__output_file = open(self.__output_filename, 'a+')
 
