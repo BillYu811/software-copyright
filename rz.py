@@ -18,7 +18,7 @@ class Rz:
 
         self.__with_filepath = config.get('with_filepath?', False) or False
         self.__with_filename = config.get('with_filename?', False) or False
-
+        print(config)
         self.__output_file = open(self.__output_filename, 'a+')
 
     def walk_all(self):
@@ -50,7 +50,7 @@ class Rz:
                 self.walk_dir(path + "/" + file)
             else:
                 if not (os.path.splitext(file)[-1] in self.__allow_files_suffix):
-                    return
+                    continue
 
                 f = open(path + "/" + file)
                 iter_f = iter(f)
